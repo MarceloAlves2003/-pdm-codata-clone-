@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa de Metas - Prefeitura de São Paulo</title>
+    
+    <!-- Fontes Oficiais -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <!-- Scripts Externos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/67c33d417f.js" crossorigin="anonymous"></script>
+
+    <style>
+        :root {
+            --color-navy: #1d1d3b;
+            --color-blue-light: #004a80;
+            --color-orange: #f16622;
+        }
+
+        body { font-family: 'Roboto', sans-serif; overflow-x: hidden; background-color: #fff; }
+        .font-bebas { font-family: 'Bebas Neue', cursive; }
+        
+        /* Video Background */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 44rem;
+            overflow: hidden;
+            background-color: #000;
+        }
+        video {
+            position: absolute;
+            top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            filter: brightness(0.7);
+        }
+
+        /* Barra Lateral Eixos (Igual à imagem enviada) */
+        .eixo-sidebar {
+            background-color: var(--color-navy);
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 40px 40px 0;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+        }
+        .eixo-sidebar-text {
+            transform: rotate(270deg);
+            white-space: nowrap;
+            color: white;
+            font-size: 5rem;
+            font-family: 'Bebas Neue';
+            letter-spacing: 4px;
+        }
+
+        /* Lógica de Máscara para os ícones oficiais */
+        .logo-mask {
+            width: 110px; height: 110px;
+            background-color: white;
+            -webkit-mask-size: contain; mask-size: contain;
+            -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        }
+        .logo-universo { -webkit-mask-image: url('https://programademetas.prefeitura.sp.gov.br/assets/universo_sp-Dz-S3Pz8.svg'); }
+        .logo-cidade { -webkit-mask-image: url('https://programademetas.prefeitura.sp.gov.br/assets/cidade_empreendedora-CO9f6M7H.svg'); }
+        .logo-viver { -webkit-mask-image: url('https://programademetas.prefeitura.sp.gov.br/assets/viver_sp-CcG7-E5M.svg'); }
+        .logo-capital { -webkit-mask-image: url('https://programademetas.prefeitura.sp.gov.br/assets/capital_do_futuro-C7hH8j2l.svg'); }
+
+        /* Estilo dos Cards de Eixos */
+        .card-eixo {
+            height: 300px; padding: 30px; color: white; border-radius: 25px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .card-eixo:hover { transform: translateY(-8px); filter: brightness(1.1); }
+
+        /* Barra de Porcentagem interna */
+        .progress-container-eixo {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 12px;
+            width: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-eixo { background: #fff; height: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+        /* Modal Custom */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animate-slide-up { animation: slideUp 0.4s ease-out; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="fixed p-2 bg-white z-50 w-full border-b shadow-sm">
+        <div class="container mx-auto flex justify-around items-center px-6" style="max-width: 1458px;">
+            <a href="/">
+                <span class="text-xl md:text-2xl font-light text-gray-700">
+                    PREFEITURA DE SÃO PAULO | <strong class="font-bebas text-3xl text-gray-900 tracking-wider uppercase">Programa de Metas</strong>
+                </span>
+            </a>
+            <div class="flex items-center gap-2 cursor-pointer font-bebas text-4xl hover:text-[#f16622] transition">
+                MENU <i class="fas fa-bars ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION (VÍDEO E LOGO LOCAL) -->
+    <section class="video-container pt-16">
+        <video autoplay loop muted playsinline>
+            <source src="{% static 'video.mp4' %}" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-blue-900/30 z-10"></div>
+        
+        <div class="relative z-20 container mx-auto h-full flex flex-col md:flex-row items-center justify-around px-6">
+            <div class="bg-white bg-opacity-90 p-8 rounded-lg shadow-2xl">
+                <!-- Usando a tag static para o seu logo.svg -->
+                <img alt="Logo PdM" class="w-64" src="{% static 'logo.svg' %}">
+            </div>
+
+            <div class="bg-[#004a80] p-10 text-white max-w-lg rounded-l-3xl border-l-8 border-[#f16622] shadow-2xl">
+                <p class="text-3xl font-light leading-snug">
+                    Um compromisso público do prefeito com a <br>
+                    <strong class="font-bold uppercase tracking-tight">gestão eficiente e de qualidade</strong>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE O PDM -->
+    <section class="container mx-auto px-6 py-24" style="max-width: 1458px;">
+        <div class="flex flex-col mb-12">
+            <h2 class="text-7xl font-light text-[#002f5d] uppercase mb-2">sobre o pdm</h2>
+            <div class="h-2 w-full bg-[#002f5d]"></div>
+        </div>
+        
+        <div class="flex flex-col md:flex-row items-stretch shadow-2xl rounded-3xl overflow-hidden">
+            <img src="https://programademetas.prefeitura.sp.gov.br/assets/foto_matarazzo-OaHATLu9.svg" class="md:w-1/2 object-cover">
+            <div class="bg-[#002f5d] text-white p-16 md:w-1/2 flex flex-col justify-center">
+                <h3 class="text-4xl font-bold mb-8 uppercase font-bebas tracking-wide">Prioridades definidas pelo poder público em acordo com a sociedade</h3>
+                <p class="text-xl mb-10 font-light opacity-90 leading-relaxed">
+                    No Programa de Metas aliam-se o planejamento técnico da gestão e a governança participativa.
+                </p>
+                <div class="flex gap-6">
+                    <button class="bg-[#f16622] text-white px-10 py-4 rounded-full font-bold uppercase hover:bg-orange-600 transition shadow-lg">SAIBA +</button>
+                    <button onclick="abrirModal()" class="border-2 border-white px-10 py-4 rounded-full font-bold uppercase hover:bg-white hover:text-[#002f5d] transition shadow-lg text-center">
+                        PALAVRA DO PREFEITO <br> <span class="text-xs font-normal">LEIA AQUI!</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO EIXOS ESTRATÉGICOS (API DINÂMICA) -->
+    <section class="flex flex-row min-h-[700px] mb-24 bg-white">
+        <div class="eixo-sidebar">
+            <h2 class="eixo-sidebar-text uppercase font-bebas">eixos estratégicos</h2>
+        </div>
+
+        <div class="flex-grow px-12 flex flex-col justify-center">
+            <div id="grid-eixos" class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl">
+                <!-- O JavaScript vai preencher aqui com os dados do PostgreSQL -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#002f5d] text-white pt-20 pb-10">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex flex-col md:flex-row justify-around items-center mb-16 gap-10">
+                <img src="{% static 'logo.svg' %}" class="w-64 opacity-90">
+                <img src="https://programademetas.prefeitura.sp.gov.br/assets/logo_PrefSP_com_fundo_horizontal_preto_monocromatico-A_1aBpxt.svg" class="w-72 opacity-80">
+            </div>
+            <div class="border-t border-blue-900 pt-10 text-xl font-light opacity-60 uppercase tracking-widest">
+                Secretaria de Informações e Monitoramento Estratégicos | SIME
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL "PALAVRA DO PREFEITO" -->
+    <div id="modalPrefeito" class="fixed inset-0 flex items-center justify-center z-[100] hidden bg-black/70 backdrop-blur-sm">
+        <div class="bg-[#002f5d] w-full max-w-7xl max-h-[90vh] overflow-y-auto hide-scroll rounded-3xl p-12 md:p-20 relative animate-slide-up border border-blue-500 mx-4">
+            <button onclick="fecharModal()" class="absolute top-6 right-10 text-white text-6xl hover:text-orange-500 transition">&times;</button>
+            <div class="text-white">
+                <h2 class="text-6xl md:text-8xl font-bebas uppercase mb-4">palavra do prefeito</h2>
+                <p class="text-3xl text-cyan-400 mb-12 italic font-light">Ricardo Nunes</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 text-lg md:text-xl font-light leading-relaxed text-justify">
+                    <div>
+                        <p class="mb-6">É uma honra e uma felicidade enorme ser prefeito eleito de São Paulo. Um privilégio poder servir à população da cidade que amo, o lugar onde eu nasci. Uma missão que cumpro ciente da grande responsabilidade...</p>
+                        <p class="mb-6">A Prefeitura adquiriu a condição de formular e executar políticas públicas de maneira estruturada, a médio e longo prazo, e ao mesmo tempo oferecer respostas às necessidades urgentes da capital.</p>
+                    </div>
+                    <div>
+                        <p class="mb-6">O Programa de Metas 2025–2028 é um marco para a gestão. Aqui ganham forma consolidada os objetivos que se tornaram compromissos públicos pactuados com a sociedade paulistana.</p>
+                        <p class="mt-12 font-bold text-orange-500 text-2xl">Ricardo Nunes, prefeito de São Paulo <br> <span class="text-sm font-normal">Setembro de 2025</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGICA JAVASCRIPT -->
+    <script>
+    function abrirModal() { document.getElementById('modalPrefeito').classList.remove('hidden'); document.body.style.overflow='hidden'; }
+    function fecharModal() { document.getElementById('modalPrefeito').classList.add('hidden'); document.body.style.overflow='auto'; }
+
+    async function carregarEixos() {
+        const grid = document.getElementById('grid-eixos');
+        
+        try {
+            const response = await fetch('/api/eixos');
+            const eixos = await response.json();
+            
+            console.log("Dados recebidos do banco:", eixos); // Isso ajuda a debugar
+
+            if (eixos && eixos.length > 0) {
+                grid.innerHTML = ''; // Limpa os cards brancos
+                eixos.forEach(eixo => {
+                    // Garantindo que as variáveis existem para não ficar branco
+                    const cor = eixo.cor_hex || '#cccccc'; 
+                    const titulo = eixo.titulo || 'Sem título';
+                    const progresso = eixo.progresso_medio || 0;
+                    const icone = eixo.slug_icone || 'universo';
+
+                    grid.innerHTML += `
+                        <div class="card-eixo shadow-xl" style="background-color: ${cor}">
+                            <div class="logo-mask logo-${icone}"></div>
+                            <div class="w-full">
+                                <div class="flex justify-between items-end">
+                                    <h4 class="text-4xl font-bebas leading-none uppercase text-left">${titulo}</h4>
+                                    <span class="text-3xl font-black font-bebas">${progresso}%</span>
+                                </div>
+                                <div class="progress-container-eixo">
+                                    <div class="progress-bar-eixo" style="width: ${progresso}%"></div>
+                                </div>
+                                <p class="text-[10px] uppercase font-bold mt-2 opacity-70 tracking-widest text-right italic font-roboto">Dados Reais</p>
+                            </div>
+                        </div>`;
+                });
+            }
+        } catch (error) {
+            console.error("Erro ao conectar na API:", error);
+        }
+    }
+
+    carregarEixos();
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('modalPrefeito')) fecharModal();
+    }
+</script>
