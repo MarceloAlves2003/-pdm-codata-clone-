@@ -1,0 +1,7 @@
+2026-03-15 09:32:23 +0000 - dagster - DEBUG - __ASSET_JOB - e31871f1-3052-4591-9e72-0b409234d2d2 - 5523 - LOGS_CAPTURED - Started capturing logs in process (pid: 5523).
+2026-03-15 09:32:23 +0000 - dagster - DEBUG - __ASSET_JOB - e31871f1-3052-4591-9e72-0b409234d2d2 - 5523 - atualizar_indicadores_frota - STEP_START - Started execution of step "atualizar_indicadores_frota".
+2026-03-15 09:32:23 +0000 - dagster - DEBUG - __ASSET_JOB - e31871f1-3052-4591-9e72-0b409234d2d2 - 5523 - atualizar_indicadores_frota - STEP_OUTPUT - Yielded output "result" of type "Any". (Type check passed).
+2026-03-15 09:32:23 +0000 - dagster - DEBUG - __ASSET_JOB - e31871f1-3052-4591-9e72-0b409234d2d2 - atualizar_indicadores_frota - Writing file at: /app/tmpub2hi7ur/storage/atualizar_indicadores_frota using PickledObjectFilesystemIOManager...
+2026-03-15 09:32:23 +0000 - dagster - DEBUG - __ASSET_JOB - e31871f1-3052-4591-9e72-0b409234d2d2 - 5523 - atualizar_indicadores_frota - ASSET_MATERIALIZATION - Materialized value atualizar_indicadores_frota.
+2026-03-15 09:32:23 +0000 - dagster - DEBUG - __ASSET_JOB - e31871f1-3052-4591-9e72-0b409234d2d2 - 5523 - atualizar_indicadores_frota - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+2026-03-15 09:32:23 +0000 - dagster - DEBUG - __ASSET_JOB - e31871f1-3052-4591-9e72-0b409234d2d2 - 5523 - atualizar_indicadores_frota - STEP_SUCCESS - Finished execution of step "atualizar_indicadores_frota" in 283ms.
