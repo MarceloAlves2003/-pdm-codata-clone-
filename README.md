@@ -1,4 +1,4 @@
-\# Clone - Programa de Metas (Prefeitura de SP) 
+\# Clone - Programa de Metas (Prefeitura de SP)
 
 O objetivo foi replicar a arquitetura e a interface do site oficial do Programa de Metas de São Paulo.
 
@@ -26,7 +26,7 @@ O objetivo foi replicar a arquitetura e a interface do site oficial do Programa 
 
 3\. No terminal, execute:
 
-&#x20;  docker compose up 
+&#x20;  docker compose up
 
 4\. entre em http://localhost:8000/ - Essa é a pagina do usuário
 
