@@ -213,42 +213,63 @@
     function abrirModal() { document.getElementById('modalPrefeito').classList.remove('hidden'); document.body.style.overflow='hidden'; }
     function fecharModal() { document.getElementById('modalPrefeito').classList.add('hidden'); document.body.style.overflow='auto'; }
 
+    const gridEixos = document.getElementById('grid-eixos');
+
+    function renderEixoCard({ cor, titulo, progresso, icone }) {
+        const rawProgress = Number(progresso);
+        const normalizedProgress = Number.isFinite(rawProgress) ? rawProgress : 0;
+        const clampedProgress = Math.min(Math.max(normalizedProgress, 0), 100);
+
+        gridEixos.insertAdjacentHTML('beforeend', `
+            <div class="card-eixo shadow-xl" style="background-color: ${cor}">
+                <div class="logo-mask logo-${icone}"></div>
+                <div class="w-full">
+                    <div class="flex justify-between items-end">
+                        <h4 class="text-4xl font-bebas leading-none uppercase text-left">${titulo}</h4>
+                        <span class="text-3xl font-black font-bebas">${clampedProgress}%</span>
+                    </div>
+                    <div class="progress-container-eixo">
+                        <div class="progress-bar-eixo" style="width: ${clampedProgress}%"></div>
+                    </div>
+                    <p class="text-[10px] uppercase font-bold mt-2 opacity-70 tracking-widest text-right italic font-roboto">Dados Reais</p>
+                </div>
+            </div>
+        `);
+    }
+
+    function mostrarEixoPadrao() {
+        gridEixos.innerHTML = '';
+        renderEixoCard({
+            cor: 'var(--color-blue-light)',
+            titulo: 'Dados aguardando atualização',
+            progresso: 0,
+            icone: 'universo',
+        });
+    }
+
     async function carregarEixos() {
-        const grid = document.getElementById('grid-eixos');
-        
         try {
             const response = await fetch('/api/eixos');
             const eixos = await response.json();
-            
-            console.log("Dados recebidos do banco:", eixos); // Isso ajuda a debugar
 
-            if (eixos && eixos.length > 0) {
-                grid.innerHTML = ''; // Limpa os cards brancos
+            console.log("Dados recebidos do banco:", eixos);
+
+            if (Array.isArray(eixos) && eixos.length > 0) {
+                gridEixos.innerHTML = '';
                 eixos.forEach(eixo => {
-                    // Garantindo que as variáveis existem para não ficar branco
-                    const cor = eixo.cor_hex || '#cccccc'; 
-                    const titulo = eixo.titulo || 'Sem título';
-                    const progresso = eixo.progresso_medio || 0;
-                    const icone = eixo.slug_icone || 'universo';
-
-                    grid.innerHTML += `
-                        <div class="card-eixo shadow-xl" style="background-color: ${cor}">
-                            <div class="logo-mask logo-${icone}"></div>
-                            <div class="w-full">
-                                <div class="flex justify-between items-end">
-                                    <h4 class="text-4xl font-bebas leading-none uppercase text-left">${titulo}</h4>
-                                    <span class="text-3xl font-black font-bebas">${progresso}%</span>
-                                </div>
-                                <div class="progress-container-eixo">
-                                    <div class="progress-bar-eixo" style="width: ${progresso}%"></div>
-                                </div>
-                                <p class="text-[10px] uppercase font-bold mt-2 opacity-70 tracking-widest text-right italic font-roboto">Dados Reais</p>
-                            </div>
-                        </div>`;
+                    renderEixoCard({
+                        cor: eixo.cor_hex || '#cccccc',
+                        titulo: eixo.titulo || 'Sem título',
+                        progresso: eixo.progresso_medio ?? 0,
+                        icone: eixo.slug_icone || 'universo'
+                    });
                 });
+            } else {
+                mostrarEixoPadrao();
             }
         } catch (error) {
             console.error("Erro ao conectar na API:", error);
+            mostrarEixoPadrao();
         }
     }
 
