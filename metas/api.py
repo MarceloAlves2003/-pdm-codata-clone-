@@ -1,9 +1,9 @@
-from ninja import NinjaAPI, Schema
+from ninja import Router, Schema
 from django.db.models import Avg
 from .models import Eixo
 from typing import List
 
-api = NinjaAPI()
+router = Router()
 
 # Este é o formato que o JavaScript vai receber
 class EixoSchema(Schema):
@@ -12,7 +12,7 @@ class EixoSchema(Schema):
     slug_icone: str
     progresso_medio: float
 
-@api.get("/eixos", response=List[EixoSchema])
+@router.get("/eixos", response=List[EixoSchema])
 def listar_eixos(request):
     eixos = Eixo.objects.all()
     resultado = []

@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'metas',  # Sua pasta de lógica
+    'frota.apps.FrotaConfig',
 ]
 
 MIDDLEWARE = [

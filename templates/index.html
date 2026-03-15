@@ -97,6 +97,90 @@
         .hide-scroll::-webkit-scrollbar { display: none; }
         @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .animate-slide-up { animation: slideUp 0.4s ease-out; }
+
+        .frota-dashboard {
+            background: radial-gradient(circle at top right, rgba(0, 255, 186, 0.18), transparent 48%), #010c24;
+            color: #f4fbff;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+        .frota-dashboard__header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+        .frota-dashboard__header h2 {
+            font-size: clamp(2.8rem, 4vw, 3.8rem);
+        }
+        .dashboard-grid {
+            margin-top: 2.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+        }
+        .dashboard-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 2rem;
+            min-height: 220px;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        .dashboard-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .dashboard-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .dashboard-value {
+            font-size: clamp(2.8rem, 4vw, 3.2rem);
+            font-weight: 700;
+            margin: 0.4rem 0;
+        }
+        .dashboard-detail {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.45);
+        }
+        .progress-track {
+            margin-top: 1.25rem;
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 255, 186, 0.2);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #7cffbc, #00ad6e);
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            margin-top: 0.4rem;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.75);
+        }
+        .card-highlight {
+            color: #7cffbc;
+        }
+        @media (max-width: 768px) {
+            .dashboard-card {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -174,6 +258,44 @@
         </div>
     </section>
 
+    <section class="frota-dashboard">
+        <div class="container mx-auto px-6" style="max-width: 1458px;">
+            <div class="frota-dashboard__header">
+                <div>
+                    <h2 class="font-bebas uppercase tracking-widest">Monitoramento da Frota de Ônibus (Meta 52)</h2>
+                    <p class="text-[#8cf1c9] mt-2 text-lg font-light max-w-3xl">Mantenha o compromisso com a eletrificação total da frota até 2028 utilizando dados oficiais.</p>
+                </div>
+                <span class="text-[#7cffbc] text-xs uppercase tracking-[0.4em]">Atualização diária</span>
+            </div>
+            <div class="dashboard-grid">
+                <article class="dashboard-card" data-card="total">
+                    <p class="dashboard-label">Total da Frota</p>
+                    <p class="dashboard-value" data-card-value="total">0</p>
+                    <p class="dashboard-detail">Buses ativos em operação</p>
+                </article>
+                <article class="dashboard-card card-highlight" data-card="eletricos">
+                    <p class="dashboard-label">Ônibus Elétricos</p>
+                    <p class="dashboard-value" data-card-value="eletricos">0</p>
+                    <p class="dashboard-detail">Meta verde neon destacando o progresso</p>
+                    <div class="progress-track">
+                        <span class="progress-fill" data-progress-fill></span>
+                    </div>
+                    <p class="progress-label" data-progress-percent>0% da frota elétrica</p>
+                </article>
+                <article class="dashboard-card" data-card="diesel">
+                    <p class="dashboard-label">Ônibus a Diesel</p>
+                    <p class="dashboard-value" data-card-value="diesel">0</p>
+                    <p class="dashboard-detail">Em funcionamento atualmente</p>
+                </article>
+                <article class="dashboard-card" data-card="co2">
+                    <p class="dashboard-label">CO2 Evitado (t)</p>
+                    <p class="dashboard-value" data-card-value="co2">0</p>
+                    <p class="dashboard-detail">Comparado ao modelo convencional</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
     <!-- FOOTER -->
     <footer class="bg-[#002f5d] text-white pt-20 pb-10">
         <div class="container mx-auto px-6 text-center">
@@ -214,6 +336,25 @@
     function fecharModal() { document.getElementById('modalPrefeito').classList.add('hidden'); document.body.style.overflow='auto'; }
 
     const gridEixos = document.getElementById('grid-eixos');
+    const frotaValues = {
+        total: document.querySelector('[data-card-value="total"]'),
+        eletricos: document.querySelector('[data-card-value="eletricos"]'),
+        diesel: document.querySelector('[data-card-value="diesel"]'),
+        co2: document.querySelector('[data-card-value="co2"]'),
+    };
+    const progressFill = document.querySelector('[data-progress-fill]');
+    const progressLabel = document.querySelector('[data-progress-percent]');
+
+    function formatNumber(value, decimals = 0) {
+        const normalized = typeof value === 'number' ? value : Number(value);
+        if (!Number.isFinite(normalized)) {
+            return decimals > 0 ? '0,0' : '0';
+        }
+        return normalized.toLocaleString('pt-BR', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+        });
+    }
 
     function renderEixoCard({ cor, titulo, progresso, icone }) {
         const rawProgress = Number(progresso);
@@ -249,7 +390,7 @@
 
     async function carregarEixos() {
         try {
-            const response = await fetch('/api/eixos');
+            const response = await fetch('/api/pdm/eixos');
             const eixos = await response.json();
 
             console.log("Dados recebidos do banco:", eixos);
@@ -273,7 +414,48 @@
         }
     }
 
+    function atualizarMonitoramentoFrota(data = {}) {
+        const safe = {
+            total_onibus: Number.isFinite(Number(data.total_onibus)) ? Number(data.total_onibus) : 0,
+            eletricos: Number.isFinite(Number(data.eletricos)) ? Number(data.eletricos) : 0,
+            diesel: Number.isFinite(Number(data.diesel)) ? Number(data.diesel) : 0,
+            co2: Number.isFinite(Number(data.co2_evitado)) ? Number(data.co2_evitado) : 0,
+        };
+
+        if (frotaValues.total) frotaValues.total.textContent = formatNumber(safe.total_onibus);
+        if (frotaValues.eletricos) frotaValues.eletricos.textContent = formatNumber(safe.eletricos);
+        if (frotaValues.diesel) frotaValues.diesel.textContent = formatNumber(safe.diesel);
+        if (frotaValues.co2) frotaValues.co2.textContent = formatNumber(safe.co2, 1);
+
+        const percentual = safe.total_onibus
+            ? Math.min(100, Math.round((safe.eletricos / safe.total_onibus) * 100))
+            : 0;
+
+        if (progressFill) progressFill.style.width = `${percentual}%`;
+        if (progressLabel) progressLabel.textContent = `${percentual}% da frota elétrica`;
+    }
+
+    function fallbackIndicadoresFrota() {
+        atualizarMonitoramentoFrota({});
+    }
+
+    async function carregarMonitoramentoFrota() {
+        try {
+            const response = await fetch('/api/frota/dados');
+
+            if (!response.ok) throw new Error(`Resposta inválida (${response.status})`);
+
+            const indicadores = await response.json();
+            atualizarMonitoramentoFrota(indicadores);
+        } catch (error) {
+            console.error("Erro ao carregar indicadores da frota:", error);
+            fallbackIndicadoresFrota();
+        }
+    }
+
+    fallbackIndicadoresFrota();
     carregarEixos();
+    carregarMonitoramentoFrota();
 
     window.onclick = function(event) {
         if (event.target == document.getElementById('modalPrefeito')) fecharModal();

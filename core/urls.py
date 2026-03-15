@@ -1,7 +1,13 @@
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render
-from metas.api import api  # Importa a API que você criou
+from frota.api import router as router_frota
+from metas.api import router as router_metas
+from ninja import NinjaAPI
+
+api = NinjaAPI()
+api.add_router("/pdm/", router_metas)
+api.add_router("/frota/", router_frota)
 
 def home(request):
     return render(request, 'index.html')
@@ -9,5 +15,5 @@ def home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
-    path('api/', api.urls), # <--- ESTA LINHA LIGA O BANCO AO SITE
+    path('api/', api.urls),
 ]
