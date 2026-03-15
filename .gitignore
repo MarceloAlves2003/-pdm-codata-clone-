@@ -5,3 +5,8 @@ __pycache__/
 db.sqlite3
 postgres_data/
 static/video.mp4
+tmp*/
+*.err
+*.out
+*.complete
+storage/
